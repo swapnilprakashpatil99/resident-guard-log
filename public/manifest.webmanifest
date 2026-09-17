@@ -1,0 +1,17 @@
+{
+  "name": "Gatehouse Visitor Log",
+  "short_name": "Gatehouse",
+  "description": "Visitor entry and approval console for residential society gate teams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#101522",
+  "theme_color": "#101522",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
