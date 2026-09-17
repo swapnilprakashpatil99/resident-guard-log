@@ -117,6 +117,17 @@ const initialEntries: Entry[] = [
   },
 ];
 
+const defaultActiveStatus: Entry = {
+  id: 4,
+  visitor: "Rohit Sharma",
+  flat: "A-101",
+  purpose: "Delivery",
+  time: "08:05",
+  status: "Pending",
+  phone: "98980 4521",
+  note: "Waiting for resident response.",
+};
+
 const statusCopy: Record<EntryStatus, { label: string; detail: string }> = {
   Pending: { label: "Pending", detail: "Waiting for resident approval" },
   Approved: { label: "Approved", detail: "Entry Allowed" },
@@ -247,7 +258,7 @@ function GatehouseConsole({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<Tab>("new");
   const [online, setOnline] = useState(true);
   const [entries, setEntries] = useState<Entry[]>(initialEntries);
-  const [activeStatus, setActiveStatus] = useState<Entry>({ ...initialEntries[3] });
+  const [activeStatus, setActiveStatus] = useState<Entry>(defaultActiveStatus);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [logSearch, setLogSearch] = useState("");
   const [manualDialogOpen, setManualDialogOpen] = useState(false);
@@ -350,9 +361,9 @@ function NewEntryScreen({ onEntryAdded, activeStatus, onStatusChange, online }: 
       purpose,
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
       status: "Pending",
-      phone: phone || undefined,
-      photo: photoUrl || undefined,
       note: "Sent for resident approval from Main Gate.",
+      ...(phone ? { phone } : {}),
+      ...(photoUrl ? { photo: photoUrl } : {}),
     };
     onEntryAdded(entry);
     setError(online ? "Request sent. Watch the status below." : "Saved on this tablet. It will sync when online.");
@@ -532,7 +543,7 @@ function ManualEntryScreen({ onEntryAdded, onOpenConfirm, onCloseConfirm, dialog
   };
 
   const confirm = () => {
-    onEntryAdded({ id: Date.now(), visitor: visitor.trim(), flat, purpose, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }), status: "Manual", phone: phone || undefined, note: "Marked manually by gate guard; resident approval was not requested." });
+    onEntryAdded({ id: Date.now(), visitor: visitor.trim(), flat, purpose, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }), status: "Manual", note: "Marked manually by gate guard; resident approval was not requested.", ...(phone ? { phone } : {}) });
     setVisitor("");
     setPhone("");
     setError("Manual entry added to today's log.");
